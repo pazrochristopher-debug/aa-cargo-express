@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>A&A Cargo Express | Admin Portal</title>
+    <style>
+    .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+    </style>
+</head>
+<body class="bg-[#080c14] min-h-screen font-sans text-slate-200 flex items-center justify-center p-4">
+
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="w-full max-w-sm glass-card border border-slate-800/60 rounded-2xl p-6 shadow-2xl">
+        <div class="text-center mb-6">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-emerald-500 flex items-center justify-center text-white text-xl mx-auto mb-3">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h1 class="text-xl font-black text-white uppercase tracking-wider">Admin Access</h1>
+            <p class="text-slate-400 text-xs mt-1">A&A Cargo Express Control Panel</p>
+        </div>
+        <div class="space-y-3">
+            <div>
+                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Password</label>
+                <input type="password" id="adminPass" class="w-full bg-[#0d1324] text-white px-3 py-3 rounded-xl border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs" placeholder="Enter admin password">
+            </div>
+            <button onclick="checkPassword()" id="loginBtn" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-black py-3 rounded-xl transition duration-200 text-xs tracking-widest uppercase">
+                Login
+            </button>
+            <p id="loginError" class="text-rose-400 text-[10px] text-center hidden">Invalid password</p>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+    <div id="adminDashboard" class="hidden w-full max-w-6xl">
+        <div class="glass-card border border-slate-800/60 rounded-2xl p-4 sm:p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-800/40">
+                <div>
+                    <h1 class="text-lg font-black text-white uppercase tracking-wider">Package Management</h1>
+                    <p class="text-slate-400 text-[10px]">Add, update, or delete cargo manifests</p>
+                </div>
+                <button onclick="logout()" class="text-slate-400 hover:text-rose-400 text-xs flex items-center gap-1.5">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- ADD/EDIT FORM -->
+                <div class="bg-[#060a12] p-4 rounded-xl border border-slate-800/50">
+                    <h2 class="text-xs font-black text-blue-400 uppercase tracking-widest mb-3" id="formTitle">Add New Package</h2>
+                    <form id="packageForm" class="space-y-3">
+                        <input type="hidden" id="editId">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Tracking ID*</label>
+                                <input type="text" id="trackingId" required class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px] font-mono">
+                            </div>
+                            <div>
+                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Status*</label>
+                                <select id="status" required class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                                    <option>IN TRANSIT</option>
+                                    <option>ARRIVED AT HUB</option>
+                                    <option>OUT FOR DELIVERY</option>
+                                    <option>DELIVERED</option>
+                                    <option>ON HOLD</option>
+                                    <option>CUSTOMS DELAY</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Sender Name</label>
+                                <input type="text" id="senderName" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                            </div>
+                            <div>
+                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Weight</label>
+                                <input type="text" id="weight" placeholder="5.2 KG" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Origin</label>
+                                <input type="text" id="origin" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                            </div>
+                            <div>
+                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Destination</label>
+                                <input type="text" id="destination" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Current Location</label>
+                                <input type="text" id="currentLocation" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                            </div>
+                            <div>
+                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">ETA Date</label>
+                                <input type="date" id="deliveryDate" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                            </div>
+                        </div>
+
+                        <div class="border-t border-slate-800/30 pt-3 mt-3">
+                            <p class="text-[9px] uppercase font-black text-emerald-400 tracking-widest mb-2">Recipient Info</p>
+                            <div class="grid grid-cols-1 gap-3">
+                                <input type="text" id="recipientName" placeholder="Recipient Name" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                                <input type="text" id="recipientPhone" placeholder="Recipient Phone" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                                <input type="email" id="recipientEmail" placeholder="Recipient Email" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                            </div>
+                        </div>
+
+                        <!-- PUSH LOCATION CHAIN - RESTORED -->
+                        <div class="border-t border-slate-800/30 pt-3 mt-3">
+                            <p class="text-[9px] uppercase font-black text-yellow-400 tracking-widest mb-2">Push Location Update</p>
+                            <div class="flex gap-2 mb-2">
+                                <input type="text" id="newLocationInput" placeholder="e.g. Arrived at Lagos Hub" class="flex-1 bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-yellow-500 text-[11px]">
+                                <button type="button" onclick="addLocationToChain()" class="bg-yellow-600 hover:bg-yellow-500 text-white font-black px-4 rounded-lg text-[10px] uppercase">
+                                    Push Chain
+                                </button>
+                            </div>
+                            <div class="bg-[#0d1324] p-2 rounded-lg border border-slate-800/40 max-h-24 overflow-y-auto">
+                                <p class="text-[9px] text-slate-500 mb-1">History Chain: <span id="chainCount" class="text-blue-400 font-bold">0</span> checkpoints</p>
+                                <div id="historyChainPreview" class="space-y-1 text-[10px] font-mono"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Description</label>
+                            <input type="text" id="description" placeholder="Package contents" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                        </div>
+
+                        <div>
+                            <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Image URL</label>
+                            <input type="text" id="image" placeholder="https://..." class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                        </div>
+
+                        <div class="flex gap-2 pt-2">
+                            <button type="button" onclick="savePackage()" id="saveBtn" class="flex-1 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-black py-2.5 rounded-xl transition duration-200 text-[10px] tracking-widest uppercase">
+                                Save and Commit Package Changes
+                            </button>
+                            <button type="button" onclick="resetForm()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-black py-2.5 px-4 rounded-xl transition duration-200 text-[10px]">
+                                Clear
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- PACKAGE LIST -->
+                <div class="bg-[#060a12] p-4 rounded-xl border border-slate-800/50">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-xs font-black text-amber-400 uppercase tracking-widest">Existing Packages</h2>
+                        <button onclick="loadPackages()" class="text-slate-400 hover:text-blue-400 text-[10px]">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    <div id="packageList" class="space-y-2 max-h-[650px] overflow-y-auto pr-1">
+                        <p class="text-slate-500 text-[11px] text-center py-8">Loading packages...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = "admin123"; // CHANGE THIS
+        let allPackages = [];
+        let currentHistoryChain = [];
+
+        function checkPassword() {
+            const pass = document.getElementById('adminPass').value;
+            if (pass === ADMIN_PASSWORD) {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                loadPackages();
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('adminPass').value = '';
+        }
+
+        function generateTrackingId() {
+            const prefix = 'AAC';
+            const num = Math.floor(10000 + Math.random() * 90000);
+            const suffix = ['NX', 'XL', 'QR', 'YT', 'ZW'][Math.floor(Math.random() * 5)];
+            return `${prefix}-${num}-${suffix}`;
+        }
+
+        function resetForm() {
+            document.getElementById('packageForm').reset();
+            document.getElementById('editId').value = '';
+            document.getElementById('trackingId').value = generateTrackingId();
+            document.getElementById('formTitle').innerText = 'Add New Package';
+            currentHistoryChain = [];
+            updateHistoryPreview();
+        }
+
+        async function loadPackages() {
+            const list = document.getElementById('packageList');
+            list.innerHTML = '<p class="text-slate-500 text-[11px] text-center py-8"><i class="fas fa-circle-notch animate-spin"></i> Loading...</p>';
+            
+            try {
+                const res = await fetch('/api/list');
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                
+                allPackages = data.records || [];
+                
+                if (allPackages.length === 0) {
+                    list.innerHTML = '<p class="text-slate-500 text-[11px] text-center py-8">No packages found</p>';
+                    return;
+                }
+                
+                list.innerHTML = allPackages.map(pkg => `
+                    <div class="bg-[#0d1324] p-3 rounded-lg border border-slate-800/40 text-[11px]">
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="font-mono font-bold text-blue-400">${pkg.trackingId}</span>
+                            <span class="text-[9px] px-2 py-0.5 rounded ${getStatusColor(pkg.status)}">${pkg.status}</span>
+                        </div>
+                        <p class="text-slate-400 text-[10px]">${pkg.origin || 'N/A'} → ${pkg.destination || 'N/A'}</p>
+                        <p class="text-slate-500 text-[9px] mt-1">To: ${pkg.recipientName || 'N/A'}</p>
+                        <div class="flex gap-2 mt-2">
+                            <button onclick='editPackage("${pkg.id}")' class="text-[9px] bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 px-2 py-1 rounded">Edit</button>
+                            <button onclick='deletePackage("${pkg.id}", "${pkg.trackingId}")' class="text-[9px] bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 px-2 py-1 rounded">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                list.innerHTML = `<p class="text-rose-400 text-[11px] text-center py-8">Error: ${e.message}</p>`;
+            }
+        }
+
+        function getStatusColor(status) {
+            if (status === 'DELIVERED') return 'bg-emerald-500/10 text-emerald-400';
+            if (status === 'ON HOLD' || status === 'CUSTOMS DELAY') return 'bg-rose-500/10 text-rose-400';
+            return 'bg-blue-500/10 text-blue-400';
+        }
+
+        async function savePackage() {
+            const btn = document.getElementById('saveBtn');
+            const editId = document.getElementById('editId').value;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> Saving...';
+
+            const packageData = {
+                trackingId: document.getElementById('trackingId').value.trim(),
+                senderName: document.getElementById('senderName').value.trim(),
+                recipientName: document.getElementById('recipientName').value.trim(),
+                recipientPhone: document.getElementById('recipientPhone').value.trim(),
+                recipientEmail: document.getElementById('recipientEmail').value.trim(),
+                status: document.getElementById('status').value,
+                origin: document.getElementById('origin').value.trim(),
+                destination: document.getElementById('destination').value.trim(),
+                weight: document.getElementById('weight').value.trim(),
+                deliveryDate: document.getElementById('deliveryDate').value,
+                currentLocation: document.getElementById('currentLocation').value.trim(),
+                description: document.getElementById('description').value.trim(),
+                image: document.getElementById('image').value.trim(),
+                historyChain: JSON.stringify(currentHistoryChain)
+            };
+
+            if (!packageData.trackingId) {
+                alert('Tracking ID is required');
+                btn.disabled = false;
+                btn.innerText = 'Save and Commit Package Changes';
+                return;
+            }
+
+            try {
+                const url = editId? `/api/update?id=${editId}` : '/api/create';
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(packageData)
+                });
+                
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed to save');
+                
+                alert(editId? 'Package updated!' : 'Package created!');
+                resetForm();
+                loadPackages();
+            } catch (e) {
+                alert('Error: ' + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Save and Commit Package Changes';
+            }
+        }
+
+        async function editPackage(id) {
+            try {
+                const pkg = allPackages.find(p => p.id === id);
+                if (!pkg) throw new Error('Package not found');
+                
+                document.getElementById('editId').value = pkg.id;
+                document.getElementById('trackingId').value = pkg.trackingId || '';
+                document.getElementById('senderName').value = pkg.senderName || '';
+                document.getElementById('recipientName').value = pkg.recipientName || '';
+                document.getElementById('recipientPhone').value = pkg.recipientPhone || '';
+                document.getElementById('recipientEmail').value = pkg.recipientEmail || '';
+                document.getElementById('status').value = pkg.status || 'IN TRANSIT';
+                document.getElementById('origin').value = pkg.origin || '';
+                document.getElementById('destination').value = pkg.destination || '';
+                document.getElementById('weight').value = pkg.weight || '';
+                document.getElementById('deliveryDate').value = pkg.deliveryDate || '';
+                document.getElementById('currentLocation').value = pkg.currentLocation || '';
+                document.getElementById('description').value = pkg.description || '';
+                document.getElementById('image').value = pkg.image || '';
+                
+                try {
+                    currentHistoryChain = JSON.parse(pkg.historyChain || '[]');
+                } catch {
+                    currentHistoryChain = [];
+                }
+                
+                updateHistoryPreview();
+                document.getElementById('formTitle').innerText = 'Edit Package';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (e) {
+                alert('Error loading package: ' + e.message);
+            }
+        }
+
+        async function deletePackage(id, trackingId) {
+            if (!confirm(`Delete package ${trackingId}?`)) return;
+            
+            try {
+                const res = await fetch(`/api/delete?id=${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                
+                alert('Package deleted');
+                loadPackages();
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        function addLocationToChain() {
+            const locInput = document.getElementById('newLocationInput');
+            const loc = locInput.value.trim();
+            if (!loc) {
+                alert('Enter a location');
+                return;
+            }
+            
+            currentHistoryChain.unshift({
+                location: loc,
+                time: new Date().toLocaleString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                })
+            });
+            
+            locInput.value = '';
+            updateHistoryPreview();
+        }
+
+        function updateHistoryPreview() {
+            document.getElementById('chainCount').innerText = currentHistoryChain.length;
+            const preview = document.getElementById('historyChainPreview');
+            
+            if (currentHistoryChain.length === 0) {
+                preview.innerHTML = '<p class="text-slate-600">No checkpoints yet</p>';
+                return;
+            }
+            
+            preview.innerHTML = currentHistoryChain.map((item, idx) => `
+                <div class="flex justify-between items-center ${idx === 0? 'text-blue-400' : 'text-slate-400'}">
+                    <span>• ${item.location}</span>
+                    <span class="text-[9px]">${item.time}</span>
+                </div>
+            `).join('');
+        }
+
+        // Auto-generate tracking ID on new package
+        function initNewPackage() {
+            resetForm();
+        }
+
+        // Allow Enter key to login
+        document.getElementById('adminPass').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        // Initialize with new package form
+        window.onload = () => {
+            initNewPackage();
+        };
+    </script>
+</body>
+</html>
