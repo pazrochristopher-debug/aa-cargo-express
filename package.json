@@ -1,6 +1,6 @@
 {
   "name": "aa-cargo-express",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "dependencies": {
     "@xata.io/client": "^0.30.0"
