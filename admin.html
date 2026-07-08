@@ -206,40 +206,42 @@
             updateHistoryPreview();
         }
 
-        async function loadPackages() {
-            const list = document.getElementById('packageList');
-            list.innerHTML = '<p class="text-slate-500 text-[11px] text-center py-8"><i class="fas fa-circle-notch animate-spin"></i> Loading...</p>';
+       async function loadPackages() {
+  try {
+    const res = await fetch('/api/list');
+    const data = await res.json();
+    
+    if (!res.ok) {
+      console.error('API Error:', data);
+      document.getElementById('packageList').innerHTML = `Error: ${data.error}`;
+      return;
+    }
 
-            try {
-                const res = await fetch('/api/list');
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
+    const packages = data.packages || []; // <-- Key fix: use data.packages
+    
+    if (packages.length === 0) {
+      document.getElementById('packageList').innerHTML = 'No packages found';
+      return;
+    }
 
-                allPackages = data.records || [];
+    const html = packages.map(pkg => `
+      <div class="package-item">
+        <strong>${pkg.trackingId}</strong> - ${pkg.recipientName} 
+        <span>${pkg.status}</span>
+        <button onclick="editPackage(${pkg.id})">Edit</button>
+        <button onclick="deletePackage(${pkg.id})">Delete</button>
+      </div>
+    `).join('');
+    
+    document.getElementById('packageList').innerHTML = html;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    document.getElementById('packageList').innerHTML = 'Error loading packages';
+  }
+}
 
-                if (allPackages.length === 0) {
-                    list.innerHTML = '<p class="text-slate-500 text-[11px] text-center py-8">No packages found</p>';
-                    return;
-                }
-
-                list.innerHTML = allPackages.map(pkg => `
-                    <div class="bg-[#0d1324] p-3 rounded-lg border border-slate-800/40 text-[11px]">
-                        <div class="flex justify-between items-start mb-1">
-                            <span class="font-mono font-bold text-blue-400">${pkg.trackingId}</span>
-                            <span class="text-[9px] px-2 py-0.5 rounded ${getStatusColor(pkg.status)}">${pkg.status}</span>
-                        </div>
-                        <p class="text-slate-400 text-[10px]">${pkg.origin || 'N/A'} → ${pkg.destination || 'N/A'}</p>
-                        <p class="text-slate-500 text-[9px] mt-1">To: ${pkg.recipientName || 'N/A'}</p>
-                        <div class="flex gap-2 mt-2">
-                            <button onclick='editPackage(${pkg.id})' class="text-[9px] bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 px-2 py-1 rounded">Edit</button>
-                            <button onclick='deletePackage(${pkg.id}, "${pkg.trackingId}")' class="text-[9px] bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 px-2 py-1 rounded">Delete</button>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (e) {
-                list.innerHTML = `<p class="text-rose-400 text-[11px] text-center py-8">Error: ${e.message}</p>`;
-            }
-        }
+// Call it when page loads
+loadPackages();
 
         function getStatusColor(status) {
             if (status === 'DELIVERED') return 'bg-emerald-500/10 text-emerald-400';
