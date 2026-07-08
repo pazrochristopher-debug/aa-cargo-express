@@ -30,7 +30,7 @@ export default async function handler(req, res) {
       data.recipientEmail, data.status, data.origin, data.destination, data.weight,
       data.deliveryDate || null, data.currentLocation, data.description, data.image,
       data.historyChain || '[]', 
-      parseInt(id) // <-- This is the fix: convert string ID to number
+      parseInt(id)
     ];
 
     const { rows } = await pool.query(query, values);
