@@ -39,7 +39,6 @@ export default async function handler(req, res) {
 
     const { rows } = await pool.query(query, values);
     
-    // Map DB snake_case to JS camelCase for your admin.html
     const pkg = rows[0];
     const mapped = {
       id: pkg.id,
