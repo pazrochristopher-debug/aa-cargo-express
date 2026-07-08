@@ -29,7 +29,8 @@ export default async function handler(req, res) {
       data.trackingId, data.senderName, data.recipientName, data.recipientPhone,
       data.recipientEmail, data.status, data.origin, data.destination, data.weight,
       data.deliveryDate || null, data.currentLocation, data.description, data.image,
-      data.historyChain || '[]', id
+      data.historyChain || '[]', 
+      parseInt(id) // <-- This is the fix: convert string ID to number
     ];
 
     const { rows } = await pool.query(query, values);
