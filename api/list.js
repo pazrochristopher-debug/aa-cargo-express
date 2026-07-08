@@ -2,13 +2,15 @@ import { Pool } from 'pg';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 export default async function handler(req, res) {
   try {
     const { rows } = await pool.query('SELECT * FROM packages ORDER BY created_at DESC');
     
-    // Map DB fields to camelCase for admin.html
     const records = rows.map(pkg => ({
       id: pkg.id,
       trackingId: pkg.tracking_id,
@@ -30,6 +32,7 @@ export default async function handler(req, res) {
     
     res.status(200).json({ records });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 }
