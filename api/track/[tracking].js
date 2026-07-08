@@ -6,7 +6,6 @@ const pool = new Pool({
 });
 
 export default async function handler(req, res) {
-  // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
 
@@ -22,7 +21,7 @@ export default async function handler(req, res) {
 
   try {
     const result = await pool.query(
-      'SELECT * FROM packages WHERE "trackingId" = $1 LIMIT 1',
+      'SELECT * FROM packages WHERE tracking_id = $1 LIMIT 1',
       [tracking]
     );
 
@@ -30,7 +29,27 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: 'Package not found' });
     }
 
-    return res.status(200).json({ package: result.rows[0] });
+    // Convert snake_case from DB to camelCase for frontend
+    const pkg = result.rows[0];
+    const formatted = {
+      id: pkg.id,
+      trackingId: pkg.tracking_id,
+      senderName: pkg.sender_name,
+      recipientName: pkg.recipient_name,
+      recipientPhone: pkg.recipient_phone,
+      recipientEmail: pkg.recipient_email,
+      status: pkg.status,
+      origin: pkg.origin,
+      destination: pkg.destination,
+      weight: pkg.weight,
+      deliveryDate: pkg.delivery_date,
+      currentLocation: pkg.current_location,
+      description: pkg.description,
+      image: pkg.image,
+      historyChain: pkg.history_chain
+    };
+
+    return res.status(200).json({ package: formatted });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Database error' });
