@@ -429,4 +429,125 @@
 
         function fillSampleCode() {
             document.getElementById('trackInput').value = "AAC-94820-NX";
-            document.getElementById('trackInput
+            document.getElementById('trackInput');
+            const logo = document.getElementById('logoSection');
+            const result = document.getElementById('resultSection');
+            const content = document.getElementById('resultContent');
+            const badge = document.getElementById('badgeStatus');
+            const timeline = document.getElementById('journeyTimeline');
+            const desc = document.getElementById('outputDescription');
+            const img = document.getElementById('outputImage');
+            const imgContainer = document.getElementById('imageContainer');
+
+            const rName = document.getElementById('outRecName');
+            const rPhone = document.getElementById('outRecPhone');
+            const rEmail = document.getElementById('outRecEmail');
+
+            if(!id) {
+                alert("Please provide a tracking number.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-circle-notch animate-spin text-"></i>`;
+
+            try {
+                // Calls /api/track/AAC-12345-NX which hits /api/track/[tracking].js
+                const response = await fetch(`/api/track/${id}`);
+                
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.error || 'Package not found');
+                }
+                
+                const { package: match } = await response.json();
+
+                logo.classList.add('hidden');
+                result.classList.remove('hidden');
+                
+                const currentStatus = match.status || "IN TRANSIT";
+                if(currentStatus.includes('DELIVERED')) {
+                    badge.className = "px-2 py-0.5 rounded text- font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+                } else if(currentStatus.includes('HOLD') || currentStatus.includes('DELAY')) {
+                    badge.className = "px-2 py-0.5 rounded text- font-black uppercase tracking-widest bg-rose-500/10 text-rose-400 border border-rose-500/20";
+                } else {
+                    badge.className = "px-2 py-0.5 rounded text- font-black uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-500/20";
+                }
+                badge.innerText = currentStatus;
+                
+                content.innerHTML = `
+                    <div class="grid grid-cols-1 min-:grid-cols-2 gap-2.5 bg-[#080d17] p-3 rounded-xl border border-slate-900 text-left">
+                        <div>
+                            <p class="text-slate-500 text- uppercase font-black tracking-widest">Shipper Authority</p>
+                            <p class="font-extrabold text-slate-200 text-xs mt-0.5">${match.senderName || 'Unassigned'}</p>
+                        </div>
+                        <div>
+                            <p class="text-slate-500 text- uppercase font-black tracking-widest">Verified Freight Weight</p>
+                            <p class="font-bold text-slate-300 text-xs mt-0.5">${match.weight || 'Not Logged'}</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 min-:grid-cols-2 gap-2.5 bg-[#080d17] p-3 rounded-xl border border-slate-900 text-left">
+                        <div>
+                            <p class="text-slate-500 text- uppercase font-black tracking-widest"><i class="fas fa-plane-departure text-slate-600 mr-1"></i> Origin Point</p>
+                            <p class="font-extrabold text-slate-300 text-xs mt-0.5">${match.origin || 'Unassigned'}</p>
+                        </div>
+                        <div>
+                            <p class="text-blue-400 text- uppercase font-black tracking-widest"><i class="fas fa-plane-arrival mr-1"></i> Destination Hub</p>
+                            <p class="font-extrabold text-blue-400 text-xs mt-0.5">${match.destination || 'Unassigned'}</p>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-blue-950/20 to-slate-900/30 p-3 rounded-xl border border-slate-900 text-center">
+                        <p class="text-slate-500 text- uppercase font-black tracking-widest">Estimated Schedule Arrival ETA</p>
+                        <p class="font-black text-emerald-400 text-xs sm:text-sm mt-0.5 font-mono tracking-wide">${match.deliveryDate || 'Pending Estimation'}</p>
+                    </div>
+                `;
+
+                rName.innerText = match.recipientName || 'Unassigned';
+                rPhone.innerText = match.recipientPhone || 'N/A';
+                rEmail.innerText = match.recipientEmail || 'N/A';
+
+                let chain = [];
+                try {
+                    chain = typeof match.historyChain === 'string' ? JSON.parse(match.historyChain) : (match.historyChain || []);
+                } catch(e) { chain = []; }
+
+                if(chain.length === 0) {
+                    const fallbackLoc = match.currentLocation || 'In Transit to Destination Hub Module';
+                    timeline.innerHTML = `
+                        <div class="relative pl-0.5 text-left">
+                            <span class="absolute -left- top-1 bg-blue-500 w-1.5 h-1.5 rounded-full ring-4 ring-slate-950"></span>
+                            <p class="text-slate-300 font-extrabold text-xs tracking-wide">${fallbackLoc}</p>
+                            <p class="text-slate-500 text- font-mono mt-0.5">Automated Checkpoint Link</p>
+                        </div>
+                    `;
+                } else {
+                    timeline.innerHTML = chain.map((step, idx) => `
+                        <div class="relative pl-0.5 text-left">
+                            <span class="absolute -left- top-1 ${idx === 0 ? 'bg-blue-400 animate-pulse' : 'bg-slate-700'} w-1.5 h-1.5 rounded-full ring-4 ring-slate-950"></span>
+                            <p class="${idx === 0 ? 'text-blue-400 font-black' : 'text-slate-300 font-bold'} text-xs tracking-wide">${step.location}</p>
+                            <p class="text-slate-500 text- mt-0.5 font-mono"><i class="far fa-clock mr-1 text-"></i> ${step.time}</p>
+                        </div>
+                    `).join('');
+                }
+
+                desc.innerText = match.description || 'General Merchandise Packaging Content';
+                
+                if(match.image && match.image.trim() !== "") {
+                    imgContainer.classList.remove('hidden');
+                    img.src = match.image;
+                } else {
+                    imgContainer.classList.add('hidden');
+                    img.src = "";
+                }
+
+            } catch(e) {
+                alert(`Error: ${e.message}`);
+                console.error(e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span>SEARCH</span> <i class="fas fa-arrow-right text-"></i>`;
+            }
+        }
+    </script>
+</body>
+</html>
