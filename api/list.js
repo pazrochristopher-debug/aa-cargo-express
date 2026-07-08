@@ -13,12 +13,6 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
-  
-  if (req.method!== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-  // ... rest of code
-}
 
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -28,18 +22,17 @@ export default async function handler(req, res) {
     const result = await pool.query('SELECT * FROM packages ORDER BY id DESC');
 
     const packages = result.rows.map(pkg => {
-      // Safely handle history_chain - can be null, string, or object
+      // This handles null, [], "[]", {} safely - no more crashes
       let historyChain = [];
-      if (pkg.history_chain) {
-        if (typeof pkg.history_chain === 'string') {
-          try {
-            historyChain = JSON.parse(pkg.history_chain);
-          } catch (e) {
-            historyChain = []; // If parsing fails, use empty array
-          }
-        } else {
-          historyChain = pkg.history_chain; // Already an object/array
+      try {
+        if (pkg.history_chain) {
+          historyChain = typeof pkg.history_chain === 'object'
+           ? pkg.history_chain
+            : JSON.parse(pkg.history_chain);
         }
+      } catch (e) {
+        console.error('Bad history_chain for id', pkg.id, e.message);
+        historyChain = [];
       }
 
       return {
@@ -57,7 +50,7 @@ export default async function handler(req, res) {
         currentLocation: pkg.current_location,
         description: pkg.description,
         image: pkg.image,
-        historyChain: historyChain
+        historyChain: Array.isArray(historyChain) ? historyChain : []
       };
     });
 
@@ -66,7 +59,7 @@ export default async function handler(req, res) {
     console.error('List API Error:', error);
     return res.status(500).json({
       error: 'Database error',
-      details: error.message // This tells us exactly why it failed
+      details: error.message
     });
   }
 }
