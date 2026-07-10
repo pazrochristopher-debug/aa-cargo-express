@@ -1,4 +1,10 @@
 import jwt from 'jsonwebtoken';
+import { Pool } from 'pg';
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
 
 function verifyAdmin(req, res) {
   const token = req.headers.authorization?.replace('Bearer ', '');
@@ -12,21 +18,10 @@ function verifyAdmin(req, res) {
 }
 
 export default async function handler(req, res) {
-  if (!verifyAdmin(req, res)) return; // Stops here if not logged in
-
-  //... your existing create/update/delete code
-}
-import { Pool } from 'pg';
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
-
-export default async function handler(req, res) {
+  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -35,6 +30,9 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  // Check admin auth first
+  if (!verifyAdmin(req, res)) return;
 
   try {
     const result = await pool.query('SELECT * FROM packages ORDER BY id DESC');
