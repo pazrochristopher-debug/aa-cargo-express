@@ -5,18 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- FIXED: Added Inter font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <title>A&A Cargo Express | Admin Portal</title>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-       .glass-card {
+        body { font-family: 'Geist', sans-serif; }
+      .font-mono { font-family: 'JetBrains Mono', monospace!important; }
+      .glass-card {
             background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -24,6 +20,10 @@
     </style>
 </head>
 <body class="bg-[#080c14] min-h-screen font-sans text-slate-200 flex items-center justify-center p-4">
+
+    <div id="toast" class="fixed top-4 right-4 bg-emerald-600 text-white px-4 py-3 rounded-xl shadow-2xl font-black text-xs uppercase tracking-widest hidden z-50">
+        <i class="fas fa-check-circle mr-2"></i><span id="toastMsg"></span>
+    </div>
 
     <!-- LOGIN SCREEN -->
     <div id="loginScreen" class="w-full max-w-sm glass-card border border-slate-800/60 rounded-2xl p-6 shadow-2xl">
@@ -68,11 +68,11 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Tracking ID*</label>
-                                <input type="text" id="trackingId" required class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text- font-mono">
+                                <input type="text" id="trackingId" required class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs font-mono">
                             </div>
                             <div>
                                 <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Status*</label>
-                                <select id="status" required class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                                <select id="status" required class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
                                     <option>IN TRANSIT</option>
                                     <option>ARRIVED AT HUB</option>
                                     <option>OUT FOR DELIVERY</option>
@@ -86,50 +86,49 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Sender Name</label>
-                                <input type="text" id="senderName" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                                <input type="text" id="senderName" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
                             </div>
                             <div>
                                 <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Weight</label>
-                                <input type="text" id="weight" placeholder="5.2 KG" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                                <input type="text" id="weight" placeholder="5.2 KG" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Origin</label>
-                                <input type="text" id="origin" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                                <input type="text" id="origin" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
                             </div>
                             <div>
                                 <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Destination</label>
-                                <input type="text" id="destination" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                                <input type="text" id="destination" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Current Location</label>
-                                <input type="text" id="currentLocation" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                                <input type="text" id="currentLocation" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
                             </div>
                             <div>
                                 <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">ETA Date</label>
-                                <input type="date" id="deliveryDate" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                                <input type="date" id="deliveryDate" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
                             </div>
                         </div>
 
                         <div class="border-t border-slate-800/30 pt-3 mt-3">
                             <p class="text- uppercase font-black text-emerald-400 tracking-widest mb-2">Recipient Info</p>
                             <div class="grid grid-cols-1 gap-3">
-                                <input type="text" id="recipientName" placeholder="Recipient Name" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
-                                <input type="text" id="recipientPhone" placeholder="Recipient Phone" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
-                                <input type="email" id="recipientEmail" placeholder="Recipient Email" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                                <input type="text" id="recipientName" placeholder="Recipient Name" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
+                                <input type="text" id="recipientPhone" placeholder="Recipient Phone" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
+                                <input type="email" id="recipientEmail" placeholder="Recipient Email" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
                             </div>
                         </div>
 
-                        <!-- PUSH LOCATION CHAIN -->
                         <div class="border-t border-slate-800/30 pt-3 mt-3">
                             <p class="text- uppercase font-black text-yellow-400 tracking-widest mb-2">Push Location Update</p>
                             <div class="flex gap-2 mb-2">
-                                <input type="text" id="newLocationInput" placeholder="e.g. Arrived at Lagos Hub" class="flex-1 bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-yellow-500 text-">
+                                <input type="text" id="newLocationInput" placeholder="e.g. Arrived at Lagos Hub" class="flex-1 bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-yellow-500 text-xs">
                                 <button type="button" onclick="addLocationToChain()" class="bg-yellow-600 hover:bg-yellow-500 text-white font-black px-4 rounded-lg text- uppercase">
                                     Push Chain
                                 </button>
@@ -142,12 +141,12 @@
 
                         <div>
                             <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Description</label>
-                            <input type="text" id="description" placeholder="Package contents" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                            <input type="text" id="description" placeholder="Package contents" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
                         </div>
 
                         <div>
                             <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Image URL</label>
-                            <input type="text" id="image" placeholder="https://..." class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                            <input type="text" id="image" placeholder="https://..." class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
                         </div>
 
                         <div class="flex gap-2 pt-2">
@@ -178,22 +177,56 @@
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "admin123"; // CHANGE THIS
         let allPackages = [];
         let currentHistoryChain = [];
 
-        function checkPassword() {
+        function getAuthHeaders() {
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('admin_token')}`
+            };
+        }
+
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            const color = type === 'error'? 'bg-rose-600' : 'bg-emerald-600';
+            toast.className = `fixed top-4 right-4 ${color} text-white px-4 py-3 rounded-xl shadow-2xl font-black text-xs uppercase tracking-widest z-50`;
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        async function checkPassword() {
             const pass = document.getElementById('adminPass').value;
-            if (pass === ADMIN_PASSWORD) {
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> Verifying...';
+
+            try {
+                const res = await fetch('/api/admin-auth', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: pass })
+                });
+
+                if (!res.ok) throw new Error('Invalid password');
+
+                const { token } = await res.json();
+                sessionStorage.setItem('admin_token', token);
+
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('adminDashboard').classList.remove('hidden');
                 loadPackages();
-            } else {
+            } catch (e) {
                 document.getElementById('loginError').classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Login';
             }
         }
 
         function logout() {
+            sessionStorage.removeItem('admin_token');
             document.getElementById('loginScreen').classList.remove('hidden');
             document.getElementById('adminDashboard').classList.add('hidden');
             document.getElementById('adminPass').value = '';
@@ -217,14 +250,11 @@
 
         async function loadPackages() {
             try {
-                const res = await fetch('/api/list');
-                const data = await res.json();
+                const res = await fetch('/api/list', { headers: getAuthHeaders() });
+                if (res.status === 401) return logout();
 
-                if (!res.ok) {
-                    console.error('API Error:', data);
-                    document.getElementById('packageList').innerHTML = `<p class="text-rose-400 text- text-center py-8">Error: ${data.error}</p>`;
-                    return;
-                }
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
 
                 allPackages = data.packages || [];
 
@@ -234,7 +264,7 @@
                 }
 
                 const html = allPackages.map(pkg => `
-                    <div class="bg-[#0d1324] p-3 rounded-lg border border-slate-800/40 flex justify-between items-center">
+                    <div class="bg-[#0d1324] p-3 rounded-lg border border-slate-800/40 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                         <div class="flex-1">
                             <div class="flex items-center gap-2 mb-1">
                                 <span class="text-blue-400 font-mono text- font-bold">${pkg.trackingId}</span>
@@ -256,7 +286,7 @@
                 document.getElementById('packageList').innerHTML = html;
             } catch (error) {
                 console.error('Fetch error:', error);
-                document.getElementById('packageList').innerHTML = '<p class="text-rose-400 text- text-center py-8">Error loading packages</p>';
+                showToast('Error loading packages', 'error');
             }
         }
 
@@ -290,7 +320,7 @@
             };
 
             if (!packageData.trackingId) {
-                alert('Tracking ID is required');
+                showToast('Tracking ID is required', 'error');
                 btn.disabled = false;
                 btn.innerText = 'Save and Commit Package Changes';
                 return;
@@ -302,18 +332,19 @@
 
                 const res = await fetch(url, {
                     method: method,
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders(),
                     body: JSON.stringify(packageData)
                 });
 
+                if (res.status === 401) return logout();
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || data.details || 'Failed to save');
 
-                alert(editId? 'Package updated!' : 'Package created!');
+                showToast(editId? 'Package updated!' : 'Package created!');
                 resetForm();
                 loadPackages();
             } catch (e) {
-                alert('Error: ' + e.message);
+                showToast('Error: ' + e.message, 'error');
                 console.error(e);
             } finally {
                 btn.disabled = false;
@@ -323,7 +354,7 @@
 
         function editPackage(id) {
             const pkg = allPackages.find(p => p.id === id);
-            if (!pkg) return alert('Package not found');
+            if (!pkg) return showToast('Package not found', 'error');
 
             document.getElementById('editId').value = pkg.id;
             document.getElementById('trackingId').value = pkg.trackingId || '';
@@ -351,14 +382,19 @@
             if (!confirm(`Delete package ${trackingId}?`)) return;
 
             try {
-                const res = await fetch(`/api/delete?id=${id}`, { method: 'DELETE' });
+                const res = await fetch(`/api/delete?id=${id}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+
+                if (res.status === 401) return logout();
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || data.details);
 
-                alert('Package deleted');
+                showToast('Package deleted');
                 loadPackages();
             } catch (e) {
-                alert('Error: ' + e.message);
+                showToast('Error: ' + e.message, 'error');
             }
         }
 
@@ -366,7 +402,7 @@
             const locInput = document.getElementById('newLocationInput');
             const loc = locInput.value.trim();
             if (!loc) {
-                alert('Enter a location');
+                showToast('Enter a location', 'error');
                 return;
             }
 
@@ -407,6 +443,12 @@
 
         window.onload = () => {
             resetForm();
+            // Auto-logout if token exists but expired
+            if (sessionStorage.getItem('admin_token')) {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                loadPackages();
+            }
         };
     </script>
 </body>
