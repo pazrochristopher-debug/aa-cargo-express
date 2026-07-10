@@ -10,26 +10,26 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'PUT,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method!== 'PUT') return res.status(405).json({ error: 'Method not allowed' });
 
-  if (req.method !== 'PUT') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  // ID comes from query: /api/update?id=3
   const { id } = req.query;
-  
-  if (!id) {
-    return res.status(400).json({ error: 'Missing package id' });
-  }
+  if (!id) return res.status(400).json({ error: 'Missing package id' });
 
   const {
     trackingId, senderName, recipientName, recipientPhone, recipientEmail,
     status, origin, destination, weight, deliveryDate, currentLocation,
     description, image, historyChain
   } = req.body;
+
+  // Convert empty strings to null + fix date format
+  const cleanValue = (val) => val === '' || val === undefined? null : val;
+
+  // Fix: Convert "2026-07-20T00:00:00.000Z" to "2026-07-20" for date column
+  const cleanDate = (val) => {
+    if (!val) return null;
+    return val.includes('T')? val.split('T')[0] : val;
+  };
 
   try {
     const result = await pool.query(
@@ -40,9 +40,21 @@ export default async function handler(req, res) {
         history_chain = $14
       WHERE id = $15 RETURNING *`,
       [
-        trackingId, senderName, recipientName, recipientPhone, recipientEmail,
-        status, origin, destination, weight, deliveryDate, currentLocation,
-        description, image, JSON.stringify(historyChain || []), id
+        cleanValue(trackingId),
+        cleanValue(senderName),
+        cleanValue(recipientName),
+        cleanValue(recipientPhone),
+        cleanValue(recipientEmail),
+        cleanValue(status),
+        cleanValue(origin),
+        cleanValue(destination),
+        cleanValue(weight),
+        cleanDate(deliveryDate), // <-- Fixed date handling
+        cleanValue(currentLocation),
+        cleanValue(description),
+        cleanValue(image),
+        JSON.stringify(historyChain || []),
+        id
       ]
     );
 
@@ -50,28 +62,12 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: 'Package not found' });
     }
 
-    const pkg = result.rows[0];
-    return res.status(200).json({
-      package: {
-        id: pkg.id,
-        trackingId: pkg.tracking_id,
-        senderName: pkg.sender_name,
-        recipientName: pkg.recipient_name,
-        recipientPhone: pkg.recipient_phone,
-        recipientEmail: pkg.recipient_email,
-        status: pkg.status,
-        origin: pkg.origin,
-        destination: pkg.destination,
-        weight: pkg.weight,
-        deliveryDate: pkg.delivery_date,
-        currentLocation: pkg.current_location,
-        description: pkg.description,
-        image: pkg.image,
-        historyChain: pkg.history_chain
-      }
-    });
+    return res.status(200).json({ package: result.rows[0] });
   } catch (error) {
     console.error('Update API Error:', error);
-    return res.status(500).json({ error: 'Database error', details: error.message });
+    return res.status(500).json({
+      error: 'Database error',
+      details: error.message
+    });
   }
 }
