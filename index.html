@@ -5,26 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- FIXED: Added Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
     <title>A&A Cargo Express | Next-Gen Enterprise Tracking</title>
     <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
         @keyframes marquee {
             0% { transform: translateX(0%); }
             100% { transform: translateX(-50%); }
         }
-   .animate-marquee {
+ .animate-marquee {
             display: flex;
             width: max-content;
             animation: marquee 30s linear infinite;
         }
-   .glass-card {
+ .glass-card {
             background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
         }
-   .gradient-border {
+ .gradient-border {
             position: relative;
         }
-   .gradient-border::before {
+ .gradient-border::before {
             content: '';
             position: absolute;
             inset: 0;
@@ -54,7 +63,7 @@
     <!-- 2. NAVIGATION HEADER -->
     <header class="bg-[#0b1324]/80 border-b border-slate-800/40 backdrop-blur-xl sticky top-0 z-40 px-4 sm:px-6 py-3.5">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            
+
             <div class="flex items-center gap-2.5 group cursor-pointer flex-shrink-0">
                 <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-emerald-500 flex items-center justify-center text-white text-base shadow-lg shadow-blue-500/10 transition duration-300">
                     <i class="fas fa-boxes-packing"></i>
@@ -110,7 +119,7 @@
             <p class="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-lg mx-auto lg:mx-0">
                 Access instant end-to-end telemetry manifests. Input your tracking ID to query our cloud database for real-time station stamps, transit history, and verified image handoffs.
             </p>
-            
+
             <div class="grid grid-cols-3 gap-3 pt-4 border-t border-slate-800/40 max-w-md mx-auto lg:mx-0">
                 <div class="p-3 bg-slate-900/20 rounded-xl border border-slate-800/30">
                     <p class="text-xl font-black text-white">140+</p>
@@ -129,7 +138,7 @@
 
         <!-- CONSOLE APP WRAPPER -->
         <div class="w-full lg:w-1/2 max-w-xl glass-card border border-slate-800/60 rounded-2xl p-3.5 xs:p-4 sm:p-6 shadow-2xl relative gradient-border">
-            
+
             <!-- INPUT HOUSING -->
             <div class="bg-[#060a12] p-4 rounded-xl border border-slate-800/50 shadow-inner mb-4">
                 <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-2"><i class="fas fa-barcode text-blue-500 mr-1"></i> Waybill Core Identifier</label>
@@ -142,7 +151,7 @@
                         <span>SEARCH</span> <i class="fas fa-arrow-right text-"></i>
                     </button>
                 </div>
-                
+
                 <div class="mt-3 pt-2.5 border-t border-slate-800/30 flex items-center justify-between text-">
                     <span class="text-slate-500">Need a sample dataset?</span>
                     <button onclick="fillSampleCode()" class="text-blue-400 hover:text-blue-300 font-mono font-bold underline transition">
@@ -163,12 +172,12 @@
             <!-- RESULT PORTAL -->
             <div id="resultSection" class="hidden space-y-4">
                 <div class="border-t border-slate-800/40 my-1"></div>
-                
+
                 <div class="flex items-center justify-between bg-slate-950/40 p-3 rounded-xl border border-slate-900">
                     <span class="text- font-black uppercase text-slate-400 tracking-widest flex items-center gap-1.5"><i class="fas fa-file-invoice text-blue-500"></i> SECURE CLOUD MANIFEST</span>
                     <span id="badgeStatus" class="px-2 py-0.5 rounded text- font-black uppercase tracking-widest border"></span>
                 </div>
-                
+
                 <div id="resultContent" class="space-y-3.5"></div>
 
                 <!-- CONSIGNEE CARD -->
@@ -189,7 +198,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- TIMELINE STEP MATRIX -->
                 <div class="p-1">
                     <p class="text-white text- uppercase font-black tracking-widest mb-3 flex items-center gap-1.5"><i class="fas fa-timeline text-blue-500"></i> Logistics Chain Handoffs</p>
@@ -281,7 +290,7 @@
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 text- font-black uppercase tracking-widest block mb-1">Our Services</span>
                 <h2 class="text-xl md:text-2xl font-black text-white uppercase tracking-wide">Logistics Infrastructure</h2>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-[#0b1324]/40 border border-slate-800/40 rounded-xl overflow-hidden group flex flex-col justify-between">
                     <div class="relative h-40 overflow-hidden bg-slate-950">
@@ -458,17 +467,17 @@
 
             try {
                 const response = await fetch(`/api/track/${id}`);
-                
-                if (!response.ok) {
+
+                                if (!response.ok) {
                     const err = await response.json();
                     throw new Error(err.error || 'Package not found');
                 }
-                
+
                 const { package: match } = await response.json();
 
                 logo.classList.add('hidden');
                 result.classList.remove('hidden');
-                
+
                 const currentStatus = match.status || "IN TRANSIT";
                 if(currentStatus.includes('DELIVERED')) {
                     badge.className = "px-2 py-0.5 rounded text- font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
@@ -478,7 +487,7 @@
                     badge.className = "px-2 py-0.5 rounded text- font-black uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-500/20";
                 }
                 badge.innerText = currentStatus;
-                
+
                 content.innerHTML = `
                     <div class="grid grid-cols-1 min-:grid-cols-2 gap-2.5 bg-[#080d17] p-3 rounded-xl border border-slate-900 text-left">
                         <div>
@@ -512,7 +521,7 @@
 
                 let chain = [];
                 try {
-                    chain = typeof match.historyChain === 'string' ? JSON.parse(match.historyChain) : (match.historyChain || []);
+                    chain = typeof match.historyChain === 'string'? JSON.parse(match.historyChain) : (match.historyChain || []);
                 } catch(e) { chain = []; }
 
                 if(chain.length === 0) {
@@ -527,16 +536,16 @@
                 } else {
                     timeline.innerHTML = chain.map((step, idx) => `
                         <div class="relative pl-0.5 text-left">
-                            <span class="absolute -left- top-1 ${idx === 0 ? 'bg-blue-400 animate-pulse' : 'bg-slate-700'} w-1.5 h-1.5 rounded-full ring-4 ring-slate-950"></span>
-                            <p class="${idx === 0 ? 'text-blue-400 font-black' : 'text-slate-300 font-bold'} text-xs tracking-wide">${step.location}</p>
+                            <span class="absolute -left- top-1 ${idx === 0? 'bg-blue-400 animate-pulse' : 'bg-slate-700'} w-1.5 h-1.5 rounded-full ring-4 ring-slate-950"></span>
+                            <p class="${idx === 0? 'text-blue-400 font-black' : 'text-slate-300 font-bold'} text-xs tracking-wide">${step.location}</p>
                             <p class="text-slate-500 text- mt-0.5 font-mono"><i class="far fa-clock mr-1 text-"></i> ${step.time}</p>
                         </div>
                     `).join('');
                 }
 
                 desc.innerText = match.description || 'General Merchandise Packaging Content';
-                
-                if(match.image && match.image.trim() !== "") {
+
+                if(match.image && match.image.trim()!== "") {
                     imgContainer.classList.remove('hidden');
                     img.src = match.image;
                 } else {
