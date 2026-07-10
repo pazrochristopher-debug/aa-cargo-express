@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>A&A Cargo Express | Admin Portal</title>
     <style>
-   .glass-card {
+  .glass-card {
             background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -27,13 +27,13 @@
         </div>
         <div class="space-y-3">
             <div>
-                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Password</label>
+                <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Password</label>
                 <input type="password" id="adminPass" class="w-full bg-[#0d1324] text-white px-3 py-3 rounded-xl border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs" placeholder="Enter admin password">
             </div>
             <button onclick="checkPassword()" id="loginBtn" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-black py-3 rounded-xl transition duration-200 text-xs tracking-widest uppercase">
                 Login
             </button>
-            <p id="loginError" class="text-rose-400 text-[10px] text-center hidden">Invalid password</p>
+            <p id="loginError" class="text-rose-400 text- text-center hidden">Invalid password</p>
         </div>
     </div>
 
@@ -43,7 +43,7 @@
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-800/40">
                 <div>
                     <h1 class="text-lg font-black text-white uppercase tracking-wider">Package Management</h1>
-                    <p class="text-slate-400 text-[10px]">Add, update, or delete cargo manifests</p>
+                    <p class="text-slate-400 text-">Add, update, or delete cargo manifests</p>
                 </div>
                 <button onclick="logout()" class="text-slate-400 hover:text-rose-400 text-xs flex items-center gap-1.5">
                     <i class="fas fa-sign-out-alt"></i> Logout
@@ -58,12 +58,12 @@
                         <input type="hidden" id="editId">
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Tracking ID*</label>
-                                <input type="text" id="trackingId" required class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px] font-mono">
+                                <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Tracking ID*</label>
+                                <input type="text" id="trackingId" required class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text- font-mono">
                             </div>
                             <div>
-                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Status*</label>
-                                <select id="status" required class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                                <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Status*</label>
+                                <select id="status" required class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
                                     <option>IN TRANSIT</option>
                                     <option>ARRIVED AT HUB</option>
                                     <option>OUT FOR DELIVERY</option>
@@ -76,76 +76,76 @@
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Sender Name</label>
-                                <input type="text" id="senderName" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                                <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Sender Name</label>
+                                <input type="text" id="senderName" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
                             </div>
                             <div>
-                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Weight</label>
-                                <input type="text" id="weight" placeholder="5.2 KG" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Origin</label>
-                                <input type="text" id="origin" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
-                            </div>
-                            <div>
-                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Destination</label>
-                                <input type="text" id="destination" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                                <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Weight</label>
+                                <input type="text" id="weight" placeholder="5.2 KG" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Current Location</label>
-                                <input type="text" id="currentLocation" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                                <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Origin</label>
+                                <input type="text" id="origin" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
                             </div>
                             <div>
-                                <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">ETA Date</label>
-                                <input type="date" id="deliveryDate" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                                <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Destination</label>
+                                <input type="text" id="destination" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Current Location</label>
+                                <input type="text" id="currentLocation" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                            </div>
+                            <div>
+                                <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">ETA Date</label>
+                                <input type="date" id="deliveryDate" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
                             </div>
                         </div>
 
                         <div class="border-t border-slate-800/30 pt-3 mt-3">
-                            <p class="text-[9px] uppercase font-black text-emerald-400 tracking-widest mb-2">Recipient Info</p>
+                            <p class="text- uppercase font-black text-emerald-400 tracking-widest mb-2">Recipient Info</p>
                             <div class="grid grid-cols-1 gap-3">
-                                <input type="text" id="recipientName" placeholder="Recipient Name" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
-                                <input type="text" id="recipientPhone" placeholder="Recipient Phone" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
-                                <input type="email" id="recipientEmail" placeholder="Recipient Email" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                                <input type="text" id="recipientName" placeholder="Recipient Name" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                                <input type="text" id="recipientPhone" placeholder="Recipient Phone" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
+                                <input type="email" id="recipientEmail" placeholder="Recipient Email" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
                             </div>
                         </div>
 
-                        <!-- PUSH LOCATION CHAIN - FIXED FOR NEON -->
+                        <!-- PUSH LOCATION CHAIN -->
                         <div class="border-t border-slate-800/30 pt-3 mt-3">
-                            <p class="text-[9px] uppercase font-black text-yellow-400 tracking-widest mb-2">Push Location Update</p>
+                            <p class="text- uppercase font-black text-yellow-400 tracking-widest mb-2">Push Location Update</p>
                             <div class="flex gap-2 mb-2">
-                                <input type="text" id="newLocationInput" placeholder="e.g. Arrived at Lagos Hub" class="flex-1 bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-yellow-500 text-[11px]">
-                                <button type="button" onclick="addLocationToChain()" class="bg-yellow-600 hover:bg-yellow-500 text-white font-black px-4 rounded-lg text-[10px] uppercase">
+                                <input type="text" id="newLocationInput" placeholder="e.g. Arrived at Lagos Hub" class="flex-1 bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-yellow-500 text-">
+                                <button type="button" onclick="addLocationToChain()" class="bg-yellow-600 hover:bg-yellow-500 text-white font-black px-4 rounded-lg text- uppercase">
                                     Push Chain
                                 </button>
                             </div>
                             <div class="bg-[#0d1324] p-2 rounded-lg border border-slate-800/40 max-h-24 overflow-y-auto">
-                                <p class="text-[9px] text-slate-500 mb-1">History Chain: <span id="chainCount" class="text-blue-400 font-bold">0</span> checkpoints</p>
-                                <div id="historyChainPreview" class="space-y-1 text-[10px] font-mono"></div>
+                                <p class="text- text-slate-500 mb-1">History Chain: <span id="chainCount" class="text-blue-400 font-bold">0</span> checkpoints</p>
+                                <div id="historyChainPreview" class="space-y-1 text- font-mono"></div>
                             </div>
                         </div>
 
                         <div>
-                            <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Description</label>
-                            <input type="text" id="description" placeholder="Package contents" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                            <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Description</label>
+                            <input type="text" id="description" placeholder="Package contents" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
                         </div>
 
                         <div>
-                            <label class="text-[9px] uppercase font-black text-slate-400 tracking-widest block mb-1">Image URL</label>
-                            <input type="text" id="image" placeholder="https://..." class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-[11px]">
+                            <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Image URL</label>
+                            <input type="text" id="image" placeholder="https://..." class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-">
                         </div>
 
                         <div class="flex gap-2 pt-2">
-                            <button type="button" onclick="savePackage()" id="saveBtn" class="flex-1 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-black py-2.5 rounded-xl transition duration-200 text-[10px] tracking-widest uppercase">
+                            <button type="button" onclick="savePackage()" id="saveBtn" class="flex-1 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-black py-2.5 rounded-xl transition duration-200 text- tracking-widest uppercase">
                                 Save and Commit Package Changes
                             </button>
-                            <button type="button" onclick="resetForm()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-black py-2.5 px-4 rounded-xl transition duration-200 text-[10px]">
+                            <button type="button" onclick="resetForm()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-black py-2.5 px-4 rounded-xl transition duration-200 text-">
                                 Clear
                             </button>
                         </div>
@@ -156,12 +156,12 @@
                 <div class="bg-[#060a12] p-4 rounded-xl border border-slate-800/50">
                     <div class="flex justify-between items-center mb-3">
                         <h2 class="text-xs font-black text-amber-400 uppercase tracking-widest">Existing Packages</h2>
-                        <button onclick="loadPackages()" class="text-slate-400 hover:text-blue-400 text-[10px]">
+                        <button onclick="loadPackages()" class="text-slate-400 hover:text-blue-400 text-">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
                     </div>
-                    <div id="packageList" class="space-y-2 max-h-[650px] overflow-y-auto pr-1">
-                        <p class="text-slate-500 text-[11px] text-center py-8">Loading packages...</p>
+                    <div id="packageList" class="space-y-2 max-h- overflow-y-auto pr-1">
+                        <p class="text-slate-500 text- text-center py-8">Loading packages...</p>
                     </div>
                 </div>
             </div>
@@ -206,42 +206,50 @@
             updateHistoryPreview();
         }
 
-       async function loadPackages() {
-  try {
-    const res = await fetch('/api/list');
-    const data = await res.json();
-    
-    if (!res.ok) {
-      console.error('API Error:', data);
-      document.getElementById('packageList').innerHTML = `Error: ${data.error}`;
-      return;
-    }
+        async function loadPackages() {
+            try {
+                const res = await fetch('/api/list');
+                const data = await res.json();
 
-    const packages = data.packages || []; // <-- Key fix: use data.packages
-    
-    if (packages.length === 0) {
-      document.getElementById('packageList').innerHTML = 'No packages found';
-      return;
-    }
+                if (!res.ok) {
+                    console.error('API Error:', data);
+                    document.getElementById('packageList').innerHTML = `<p class="text-rose-400 text- text-center py-8">Error: ${data.error}</p>`;
+                    return;
+                }
 
-    const html = packages.map(pkg => `
-      <div class="package-item">
-        <strong>${pkg.trackingId}</strong> - ${pkg.recipientName} 
-        <span>${pkg.status}</span>
-        <button onclick="editPackage(${pkg.id})">Edit</button>
-        <button onclick="deletePackage(${pkg.id})">Delete</button>
-      </div>
-    `).join('');
-    
-    document.getElementById('packageList').innerHTML = html;
-  } catch (error) {
-    console.error('Fetch error:', error);
-    document.getElementById('packageList').innerHTML = 'Error loading packages';
-  }
-}
+                allPackages = data.packages || [];
 
-// Call it when page loads
-loadPackages();
+                if (allPackages.length === 0) {
+                    document.getElementById('packageList').innerHTML = '<p class="text-slate-500 text- text-center py-8">No packages found</p>';
+                    return;
+                }
+
+                const html = allPackages.map(pkg => `
+                    <div class="bg-[#0d1324] p-3 rounded-lg border border-slate-800/40 flex justify-between items-center">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-blue-400 font-mono text- font-bold">${pkg.trackingId}</span>
+                                <span class="text- px-2 py-0.5 rounded ${getStatusColor(pkg.status)}">${pkg.status}</span>
+                            </div>
+                            <p class="text-slate-300 text-">${pkg.recipientName || 'No recipient'} → ${pkg.destination || 'No destination'}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editPackage(${pkg.id})" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text- font-bold">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deletePackage(${pkg.id}, '${pkg.trackingId}')" class="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded text- font-bold">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.getElementById('packageList').innerHTML = html;
+            } catch (error) {
+                console.error('Fetch error:', error);
+                document.getElementById('packageList').innerHTML = '<p class="text-rose-400 text- text-center py-8">Error loading packages</p>';
+            }
+        }
 
         function getStatusColor(status) {
             if (status === 'DELIVERED') return 'bg-emerald-500/10 text-emerald-400';
@@ -269,7 +277,7 @@ loadPackages();
                 currentLocation: document.getElementById('currentLocation').value.trim(),
                 description: document.getElementById('description').value.trim(),
                 image: document.getElementById('image').value.trim(),
-                historyChain: JSON.stringify(currentHistoryChain)
+                historyChain: currentHistoryChain // Send as array, not stringified
             };
 
             if (!packageData.trackingId) {
@@ -281,20 +289,23 @@ loadPackages();
 
             try {
                 const url = editId? `/api/update?id=${editId}` : '/api/create';
+                const method = editId? 'PUT' : 'POST'; // FIXED: Use PUT for update
+
                 const res = await fetch(url, {
-                    method: 'POST',
+                    method: method,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(packageData)
                 });
 
                 const data = await res.json();
-                if (!res.ok) throw new Error(data.error || 'Failed to save');
+                if (!res.ok) throw new Error(data.error || data.details || 'Failed to save');
 
                 alert(editId? 'Package updated!' : 'Package created!');
                 resetForm();
                 loadPackages();
             } catch (e) {
                 alert('Error: ' + e.message);
+                console.error(e);
             } finally {
                 btn.disabled = false;
                 btn.innerText = 'Save and Commit Package Changes';
@@ -320,11 +331,8 @@ loadPackages();
             document.getElementById('description').value = pkg.description || '';
             document.getElementById('image').value = pkg.image || '';
 
-            try {
-                currentHistoryChain = JSON.parse(pkg.historyChain || '[]');
-            } catch {
-                currentHistoryChain = [];
-            }
+            // FIXED: historyChain is already an array from API
+            currentHistoryChain = Array.isArray(pkg.historyChain)? pkg.historyChain : [];
 
             updateHistoryPreview();
             document.getElementById('formTitle').innerText = 'Edit Package';
@@ -337,7 +345,7 @@ loadPackages();
             try {
                 const res = await fetch(`/api/delete?id=${id}`, { method: 'DELETE' });
                 const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
+                if (!res.ok) throw new Error(data.error || data.details);
 
                 alert('Package deleted');
                 loadPackages();
@@ -380,7 +388,7 @@ loadPackages();
             preview.innerHTML = currentHistoryChain.map((item, idx) => `
                 <div class="flex justify-between items-center ${idx === 0? 'text-blue-400' : 'text-slate-400'}">
                     <span>• ${item.location}</span>
-                    <span class="text-[9px]">${item.time}</span>
+                    <span class="text-">${item.time}</span>
                 </div>
             `).join('');
         }
