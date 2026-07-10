@@ -494,32 +494,32 @@
                 }
                 badge.innerText = currentStatus;
 
-                content.innerHTML = `
-                    <div class="grid grid-cols-1 min-:grid-cols-2 gap-2.5 bg-[#080d17] p-3 rounded-xl border border-slate-900 text-left">
-                        <div>
-                            <p class="text-slate-500 text- uppercase font-black tracking-widest">Shipper Authority</p>
-                            <p class="font-extrabold text-slate-200 text-xs mt-0.5">${match.senderName || 'Unassigned'}</p>
-                        </div>
-                        <div>
-                            <p class="text-slate-500 text- uppercase font-black tracking-widest">Verified Freight Weight</p>
-                            <p class="font-bold text-slate-300 text-xs mt-0.5">${match.weight || 'Not Logged'}</p>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 min-:grid-cols-2 gap-2.5 bg-[#080d17] p-3 rounded-xl border border-slate-900 text-left">
-                        <div>
-                            <p class="text-slate-500 text- uppercase font-black tracking-widest"><i class="fas fa-plane-departure text-slate-600 mr-1"></i> Origin Point</p>
-                            <p class="font-extrabold text-slate-300 text-xs mt-0.5">${match.origin || 'Unassigned'}</p>
-                        </div>
-                        <div>
-                            <p class="text-blue-400 text- uppercase font-black tracking-widest"><i class="fas fa-plane-arrival mr-1"></i> Destination Hub</p>
-                            <p class="font-extrabold text-blue-400 text-xs mt-0.5">${match.destination || 'Unassigned'}</p>
-                        </div>
-                    </div>
-                    <div class="bg-gradient-to-r from-blue-950/20 to-slate-900/30 p-3 rounded-xl border border-slate-900 text-center">
-                        <p class="text-slate-500 text- uppercase font-black tracking-widest">Estimated Schedule Arrival ETA</p>
-                        <p class="font-black text-emerald-400 text-xs sm:text-sm mt-0.5 font-mono tracking-wide">${match.deliveryDate || 'Pending Estimation'}</p>
-                    </div>
-                `;
+               content.innerHTML = `
+    <div class="grid grid-cols-1 min-:grid-cols-2 gap-2.5 bg-[#080d17] p-3 rounded-xl border border-slate-900 text-left">
+        <div>
+            <p class="text-slate-500 text- uppercase font-black tracking-widest">Shipper Authority</p>
+            <p class="font-black text-slate-100 text-sm mt-0.5">${match.senderName || 'Unassigned'}</p>
+        </div>
+        <div>
+            <p class="text-slate-500 text- uppercase font-black tracking-widest">Verified Freight Weight</p>
+            <p class="font-bold text-slate-200 text-sm mt-0.5">${match.weight || 'Not Logged'}</p>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 min-:grid-cols-2 gap-2.5 bg-[#080d17] p-3 rounded-xl border border-slate-900 text-left">
+        <div>
+            <p class="text-slate-500 text- uppercase font-black tracking-widest"><i class="fas fa-plane-departure text-slate-600 mr-1"></i> Origin Point</p>
+            <p class="font-black text-slate-100 text-sm mt-0.5">${match.origin || 'Unassigned'}</p>
+        </div>
+        <div>
+            <p class="text-blue-400 text- uppercase font-black tracking-widest"><i class="fas fa-plane-arrival mr-1"></i> Destination Hub</p>
+            <p class="font-black text-blue-300 text-sm mt-0.5">${match.destination || 'Unassigned'}</p>
+        </div>
+    </div>
+    <div class="bg-gradient-to-r from-blue-950/20 to-slate-900/30 p-3 rounded-xl border border-slate-900 text-center">
+        <p class="text-slate-500 text- uppercase font-black tracking-widest">Estimated Schedule Arrival ETA</p>
+        <p class="font-black text-emerald-400 text-sm sm:text-base mt-0.5 font-mono tracking-wide">${match.deliveryDate || 'Pending Estimation'}</p>
+    </div>
+`;
 
                 rName.innerText = match.recipientName || 'Unassigned';
                 rPhone.innerText = match.recipientPhone || 'N/A';
