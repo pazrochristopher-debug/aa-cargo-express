@@ -6,40 +6,37 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- FIXED: Added Inter font -->
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FIXED: Single font setup -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 
-<style>
-    body {
-        font-family: 'Geist', sans-serif;
-    }
-    .font-mono {
-        font-family: 'JetBrains Mono', monospace !important;
-    }
-</style>
+    <title>A&A Cargo Express | Next-Gen Enterprise Tracking</title>
+    <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Geist', sans-serif;
+        }
+       .font-mono {
+            font-family: 'JetBrains Mono', monospace!important;
         }
         @keyframes marquee {
             0% { transform: translateX(0%); }
             100% { transform: translateX(-50%); }
         }
- .animate-marquee {
+       .animate-marquee {
             display: flex;
             width: max-content;
             animation: marquee 30s linear infinite;
         }
- .glass-card {
+       .glass-card {
             background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
         }
- .gradient-border {
+       .gradient-border {
             position: relative;
         }
- .gradient-border::before {
+       .gradient-border::before {
             content: '';
             position: absolute;
             inset: 0;
@@ -192,7 +189,7 @@
                     <div class="space-y-2 text-">
                         <div class="flex justify-between items-center border-b border-slate-800/30 pb-1.5">
                             <span class="text-slate-500">Recipient:</span>
-                            <span id="outRecName" class="text-slate-200 font-extrabold tracking-wide text-right"></span>
+                            <span id="outRecName" class="text-slate-200 font-black tracking-wide text-right"></span>
                         </div>
                         <div class="flex justify-between items-center border-b border-slate-800/30 pb-1.5">
                             <span class="text-slate-500">Secure Cell:</span>
@@ -214,7 +211,7 @@
                 <!-- DECLARATION BOX -->
                 <div class="bg-slate-950/40 border border-slate-900 p-3 rounded-xl">
                     <p class="text-slate-500 text- uppercase font-black tracking-widest">Customs Content Declaration</p>
-                    <p id="outputDescription" class="font-extrabold text-slate-300 text- mt-0.5 tracking-wide"></p>
+                    <p id="outputDescription" class="font-black text-slate-200 text- mt-0.5 tracking-wide"></p>
                 </div>
 
                 <!-- PHOTO TELEMETRY BOX -->
@@ -455,7 +452,7 @@
             const content = document.getElementById('resultContent');
             const badge = document.getElementById('badgeStatus');
             const timeline = document.getElementById('journeyTimeline');
-            const desc = document.getElementById('outputDescription');
+                        const desc = document.getElementById('outputDescription');
             const img = document.getElementById('outputImage');
             const imgContainer = document.getElementById('imageContainer');
 
@@ -474,7 +471,7 @@
             try {
                 const response = await fetch(`/api/track/${id}`);
 
-                                if (!response.ok) {
+                if (!response.ok) {
                     const err = await response.json();
                     throw new Error(err.error || 'Package not found');
                 }
@@ -494,32 +491,32 @@
                 }
                 badge.innerText = currentStatus;
 
-               content.innerHTML = `
-    <div class="grid grid-cols-1 min-:grid-cols-2 gap-2.5 bg-[#080d17] p-3 rounded-xl border border-slate-900 text-left">
-        <div>
-            <p class="text-slate-500 text- uppercase font-black tracking-widest">Shipper Authority</p>
-            <p class="font-black text-slate-100 text-sm mt-0.5">${match.senderName || 'Unassigned'}</p>
-        </div>
-        <div>
-            <p class="text-slate-500 text- uppercase font-black tracking-widest">Verified Freight Weight</p>
-            <p class="font-bold text-slate-200 text-sm mt-0.5">${match.weight || 'Not Logged'}</p>
-        </div>
-    </div>
-    <div class="grid grid-cols-1 min-:grid-cols-2 gap-2.5 bg-[#080d17] p-3 rounded-xl border border-slate-900 text-left">
-        <div>
-            <p class="text-slate-500 text- uppercase font-black tracking-widest"><i class="fas fa-plane-departure text-slate-600 mr-1"></i> Origin Point</p>
-            <p class="font-black text-slate-100 text-sm mt-0.5">${match.origin || 'Unassigned'}</p>
-        </div>
-        <div>
-            <p class="text-blue-400 text- uppercase font-black tracking-widest"><i class="fas fa-plane-arrival mr-1"></i> Destination Hub</p>
-            <p class="font-black text-blue-300 text-sm mt-0.5">${match.destination || 'Unassigned'}</p>
-        </div>
-    </div>
-    <div class="bg-gradient-to-r from-blue-950/20 to-slate-900/30 p-3 rounded-xl border border-slate-900 text-center">
-        <p class="text-slate-500 text- uppercase font-black tracking-widest">Estimated Schedule Arrival ETA</p>
-        <p class="font-black text-emerald-400 text-sm sm:text-base mt-0.5 font-mono tracking-wide">${match.deliveryDate || 'Pending Estimation'}</p>
-    </div>
-`;
+                content.innerHTML = `
+                    <div class="grid grid-cols-1 min-:grid-cols-2 gap-2.5 bg-[#080d17] p-3 rounded-xl border border-slate-900 text-left">
+                        <div>
+                            <p class="text-slate-500 text- uppercase font-black tracking-widest">Shipper Authority</p>
+                            <p class="font-black text-slate-100 text-sm mt-0.5">${match.senderName || 'Unassigned'}</p>
+                        </div>
+                        <div>
+                            <p class="text-slate-500 text- uppercase font-black tracking-widest">Verified Freight Weight</p>
+                            <p class="font-bold text-slate-200 text-sm mt-0.5">${match.weight || 'Not Logged'}</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 min-:grid-cols-2 gap-2.5 bg-[#080d17] p-3 rounded-xl border border-slate-900 text-left">
+                        <div>
+                            <p class="text-slate-500 text- uppercase font-black tracking-widest"><i class="fas fa-plane-departure text-slate-600 mr-1"></i> Origin Point</p>
+                            <p class="font-black text-slate-100 text-sm mt-0.5">${match.origin || 'Unassigned'}</p>
+                        </div>
+                        <div>
+                            <p class="text-blue-400 text- uppercase font-black tracking-widest"><i class="fas fa-plane-arrival mr-1"></i> Destination Hub</p>
+                            <p class="font-black text-blue-300 text-sm mt-0.5">${match.destination || 'Unassigned'}</p>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-blue-950/20 to-slate-900/30 p-3 rounded-xl border border-slate-900 text-center">
+                        <p class="text-slate-500 text- uppercase font-black tracking-widest">Estimated Schedule Arrival ETA</p>
+                        <p class="font-black text-emerald-400 text-sm sm:text-base mt-0.5 font-mono tracking-wide">${match.deliveryDate || 'Pending Estimation'}</p>
+                    </div>
+                `;
 
                 rName.innerText = match.recipientName || 'Unassigned';
                 rPhone.innerText = match.recipientPhone || 'N/A';
