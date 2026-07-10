@@ -1,3 +1,21 @@
+import jwt from 'jsonwebtoken';
+
+function verifyAdmin(req, res) {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  try {
+    jwt.verify(token, process.env.JWT_SECRET);
+    return true;
+  } catch {
+    res.status(401).json({ error: 'Unauthorized' });
+    return false;
+  }
+}
+
+export default async function handler(req, res) {
+  if (!verifyAdmin(req, res)) return; // Stops here if not logged in
+
+  //... your existing create/update/delete code
+}
 import { Pool } from 'pg';
 
 const pool = new Pool({
