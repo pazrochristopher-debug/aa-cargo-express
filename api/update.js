@@ -14,12 +14,19 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  if (req.method!== 'PUT') {
+  if (req.method !== 'PUT') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // ID comes from query: /api/update?id=3
+  const { id } = req.query;
+  
+  if (!id) {
+    return res.status(400).json({ error: 'Missing package id' });
+  }
+
   const {
-    id, trackingId, senderName, recipientName, recipientPhone, recipientEmail,
+    trackingId, senderName, recipientName, recipientPhone, recipientEmail,
     status, origin, destination, weight, deliveryDate, currentLocation,
     description, image, historyChain
   } = req.body;
@@ -27,14 +34,15 @@ export default async function handler(req, res) {
   try {
     const result = await pool.query(
       `UPDATE packages SET
-        tracking_id=$2, sender_name=$3, recipient_name=$4, recipient_phone=$5, recipient_email=$6,
-        status=$7, origin=$8, destination=$9, weight=$10, delivery_date=$11, current_location=$12,
-        description=$13, image=$14, history_chain=$15
-      WHERE id=$1 RETURNING *`,
+        tracking_id = $1, sender_name = $2, recipient_name = $3, recipient_phone = $4,
+        recipient_email = $5, status = $6, origin = $7, destination = $8, weight = $9,
+        delivery_date = $10, current_location = $11, description = $12, image = $13,
+        history_chain = $14
+      WHERE id = $15 RETURNING *`,
       [
-        id, trackingId, senderName, recipientName, recipientPhone, recipientEmail,
+        trackingId, senderName, recipientName, recipientPhone, recipientEmail,
         status, origin, destination, weight, deliveryDate, currentLocation,
-        description, image, JSON.stringify(historyChain || [])
+        description, image, JSON.stringify(historyChain || []), id
       ]
     );
 
@@ -42,9 +50,28 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: 'Package not found' });
     }
 
-    return res.status(200).json({ package: result.rows[0] });
+    const pkg = result.rows[0];
+    return res.status(200).json({
+      package: {
+        id: pkg.id,
+        trackingId: pkg.tracking_id,
+        senderName: pkg.sender_name,
+        recipientName: pkg.recipient_name,
+        recipientPhone: pkg.recipient_phone,
+        recipientEmail: pkg.recipient_email,
+        status: pkg.status,
+        origin: pkg.origin,
+        destination: pkg.destination,
+        weight: pkg.weight,
+        deliveryDate: pkg.delivery_date,
+        currentLocation: pkg.current_location,
+        description: pkg.description,
+        image: pkg.image,
+        historyChain: pkg.history_chain
+      }
+    });
   } catch (error) {
-    console.error(error);
+    console.error('Update API Error:', error);
     return res.status(500).json({ error: 'Database error', details: error.message });
   }
 }
