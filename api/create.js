@@ -1,4 +1,10 @@
 import jwt from 'jsonwebtoken';
+import { Pool } from 'pg';
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
 
 function verifyAdmin(req, res) {
   const token = req.headers.authorization?.replace('Bearer ', '');
@@ -12,24 +18,16 @@ function verifyAdmin(req, res) {
 }
 
 export default async function handler(req, res) {
-  if (!verifyAdmin(req, res)) return; // Stops here if not logged in
-
-  //... your existing create/update/delete code
-}
-import { Pool } from 'pg';
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
-
-export default async function handler(req, res) {
+  // CORS headers - added Authorization so browser can send token
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method!== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  // Check admin auth before touching DB
+  if (!verifyAdmin(req, res)) return;
 
   const {
     trackingId, senderName, recipientName, recipientPhone, recipientEmail,
@@ -42,7 +40,6 @@ export default async function handler(req, res) {
   // Convert empty strings to null + fix date format
   const cleanValue = (val) => val === '' || val === undefined? null : val;
 
-  // Same fix as update.js: strip time from ISO date
   const cleanDate = (val) => {
     if (!val) return null;
     return val.includes('T')? val.split('T')[0] : val;
@@ -65,7 +62,7 @@ export default async function handler(req, res) {
         cleanValue(origin),
         cleanValue(destination),
         cleanValue(weight),
-        cleanDate(deliveryDate), // <-- This was crashing it
+        cleanDate(deliveryDate),
         cleanValue(currentLocation),
         cleanValue(description),
         cleanValue(image),
