@@ -12,43 +12,78 @@
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 
     <title>A&A Cargo Express | Next-Gen Enterprise Tracking</title>
-    <style>
-        body {
-            font-family: 'Geist', sans-serif;
+<style>
+    /* Mobile-first responsive base */
+    html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+    
+    body {
+        font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+        width: 100%;
+    }
+    
+    .font-mono {
+        font-family: 'JetBrains Mono', 'Courier New', monospace !important;
+    }
+    
+    /* Marquee - faster on mobile */
+    @keyframes marquee {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+        display: flex;
+        width: max-content;
+        animation: marquee 30s linear infinite;
+    }
+    @media (max-width: 640px) {
+        .animate-marquee {
+            animation: marquee 20s linear infinite;
         }
-       .font-mono {
-            font-family: 'JetBrains Mono', monospace!important;
+    }
+    
+    /* Glass effect with fallback for older browsers */
+    .glass-card {
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+    }
+    @supports not (backdrop-filter: blur(16px)) {
+        .glass-card {
+            background: rgba(15, 23, 42, 0.95);
         }
-        @keyframes marquee {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-50%); }
+    }
+    
+    /* Gradient border fix for Safari */
+    .gradient-border {
+        position: relative;
+    }
+    .gradient-border::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 1.25rem;
+        padding: 1px;
+        background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.25), rgba(16, 185, 129, 0.15));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+    }
+    
+    /* Better tap targets for mobile - 44px minimum */
+    @media (max-width: 640px) {
+        button, a {
+            min-height: 44px;
+            min-width: 44px;
         }
-       .animate-marquee {
-            display: flex;
-            width: max-content;
-            animation: marquee 30s linear infinite;
-        }
-       .glass-card {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
-       .gradient-border {
-            position: relative;
-        }
-       .gradient-border::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 1.25rem;
-            padding: 1px;
-            background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.25), rgba(16, 185, 129, 0.15));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
-    </style>
+    }
+</style>
 </head>
 <body class="bg-[#080c14] min-h-screen font-sans text-slate-200 flex flex-col justify-between selection:bg-blue-600 selection:text-white overflow-x-hidden antialiased">
 
