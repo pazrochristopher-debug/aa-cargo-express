@@ -144,10 +144,20 @@
                             <input type="text" id="description" placeholder="Package contents" class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
                         </div>
 
-                        <div>
-                            <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Image URL</label>
-                            <input type="text" id="image" placeholder="https://..." class="w-full bg-[#0d1324] text-white px-3 py-2 rounded-lg border border-slate-700/60 focus:outline-none focus:border-blue-500 text-xs">
-                        </div>
+                       <div>
+    <label class="text- uppercase font-black text-slate-400 tracking-widest block mb-1">Package Image</label>
+    <div class="flex gap-2 items-start">
+        <button type="button" id="upload_widget_btn" class="bg-blue-600 hover:bg-blue-500 text-white font-black px-4 py-2 rounded-lg text-xs uppercase tracking-widest whitespace-nowrap">
+            <i class="fas fa-cloud-upload-alt mr-1"></i> Upload
+        </button>
+        <div class="flex-1">
+            <input type="hidden" id="image" name="image"> <!-- Keeps same id so your savePackage() works -->
+            <div id="image_preview" class="bg-[#0d1324] border border-slate-700/60 rounded-lg p-2 min-h- flex items-center">
+                <span class="text-slate-500 text-xs">No image uploaded</span>
+            </div>
+        </div>
+    </div>
+</div>
 
                         <div class="flex gap-2 pt-2">
                             <button type="button" onclick="savePackage()" id="saveBtn" class="flex-1 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-black py-2.5 rounded-xl transition duration-200 text- tracking-widest uppercase">
@@ -451,5 +461,54 @@
             }
         };
     </script>
+    <!-- Cloudinary Upload Widget -->
+<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+<script type="text/javascript">
+const cloudName = "bvsldzzs"; // <-- LINE 1: Put your Cloudinary cloud name here
+const uploadPreset = "waybill_app_preset"; // <-- LINE 2: Put your unsigned preset here
+
+const uploadWidget = cloudinary.createUploadWidget({
+    cloudName: cloudName,
+    uploadPreset: uploadPreset,
+    sources: ["local", "camera", "url"],
+    multiple: false,
+    cropping: true,
+    folder: "aa_cargo_packages",
+    clientAllowedFormats: ["jpg", "png", "jpeg", "webp"],
+    maxFileSize: 5000000 // 5MB limit
+  },
+  (error, result) => {
+    if (!error && result && result.event === "success") {
+      const url = result.info.secure_url;
+      document.getElementById("image").value = url;
+      document.getElementById("image_preview").innerHTML = `
+        <img src="${url}" class="h-10 w-10 object-cover rounded mr-2" />
+        <span class="text-emerald-400 text-xs"><i class="fas fa-check"></i> Uploaded</span>
+      `;
+      showToast('Image uploaded successfully');
+    }
+    if (error) {
+      showToast('Upload failed: ' + error.message, 'error');
+    }
+  }
+);
+
+document.getElementById("upload_widget_btn").addEventListener("click", function() {
+    uploadWidget.open();
+  }, false);
+
+// Helper to show existing image when editing
+function showExistingImage(url) {
+    if (url) {
+        document.getElementById("image_preview").innerHTML = `
+          <img src="${url}" class="h-10 w-10 object-cover rounded mr-2" />
+          <span class="text-slate-300 text-xs">Current image</span>
+        `;
+    } else {
+        document.getElementById("image_preview").innerHTML = `<span class="text-slate-500 text-xs">No image uploaded</span>`;
+    }
+}
+</script>
+</body>
 </body>
 </html>
