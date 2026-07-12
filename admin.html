@@ -135,7 +135,7 @@
                             </div>
                             <div class="bg-[#0d1324] p-2 rounded-lg border border-slate-800/40 max-h-24 overflow-y-auto">
                                 <p class="text- text-slate-500 mb-1">History Chain: <span id="chainCount" class="text-blue-400 font-bold">0</span> checkpoints</p>
-                                <div id="historyChainPreview" class="space-y-1 text- font-mono"></div>
+                               <div id="historyChainPreview" class="font-mono pl-1"></div>
                             </div>
                         </div>
 
@@ -435,34 +435,34 @@
     const preview = document.getElementById('historyChainPreview');
 
     if (currentHistoryChain.length === 0) {
-        preview.innerHTML = '<p class="text-slate-600">No checkpoints yet</p>';
+        preview.innerHTML = '<p class="text-slate-600 text-xs">No checkpoints yet</p>';
         return;
     }
 
-    preview.innerHTML = currentHistoryChain.map((item, idx) => {
-        const isLatest = idx === 0; // Since you unshift, 0 is the latest
+    let html = '';
+    currentHistoryChain.forEach((item, idx) => {
+        const isLatest = idx === 0;
         const isLast = idx === currentHistoryChain.length - 1;
         
-        return `
-            <div class="relative flex gap-3 pb-5 ${isLast ? 'pb-0' : ''}">
-                <!-- Vertical line connecting dots -->
-                ${!isLast ? '<div class="absolute left-[5.5px] top- w-px h-full bg-slate-600"></div>' : ''}
+        html += `
+            <div style="position: relative; display: flex; padding-bottom: ${isLast ? '0' : '20px'};">
+                ${!isLast ? '<div style="position: absolute; left: 5px; top: 16px; width: 1px; height: 100%; background-color: #475569;"></div>' : ''}
                 
-                <!-- Dot indicator -->
-                <div class="relative z-10 mt-1.5 shrink-0">
-                    <div class="w- h- rounded-full ${isLatest ? 'bg-yellow-400 ring-4 ring-yellow-400/20 animate-pulse' : 'bg-blue-500 ring-4 ring-blue-500/10'}"></div>
+                <div style="position: relative; z-index: 10; margin-top: 4px; flex-shrink: 0;">
+                    <div style="width: 11px; height: 11px; border-radius: 9999px; background-color: ${isLatest ? '#facc15' : '#3b82f6'}; ${isLatest ? 'box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.2);' : ''}"></div>
                 </div>
                 
-                <!-- Location + Time -->
-                <div class="flex-1 min-w-0">
-                    <div class="flex justify-between items-start gap-2">
-                        <span class="${isLatest ? 'text-yellow-400 font-bold' : 'text-slate-300'} text-xs break-words">${item.location}</span>
-                        <span class="text-slate-500 text- whitespace-nowrap shrink-0">${item.time}</span>
+                <div style="flex: 1; margin-left: 12px; min-width: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                        <span style="font-size: 12px; color: ${isLatest ? '#facc15' : '#cbd5e1'}; font-weight: ${isLatest ? '700' : '400'}; word-break: break-word;">${item.location}</span>
+                        <span style="font-size: 10px; color: #64748b; white-space: nowrap; flex-shrink: 0;">${item.time}</span>
                     </div>
                 </div>
             </div>
         `;
-    }).join('');
+    });
+    
+    preview.innerHTML = html;
 }
         document.getElementById('adminPass').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') checkPassword();
