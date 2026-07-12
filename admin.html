@@ -430,7 +430,7 @@
             updateHistoryPreview();
         }
 
-       function updateHistoryPreview() {
+      function updateHistoryPreview() {
     document.getElementById('chainCount').innerText = currentHistoryChain.length;
     const preview = document.getElementById('historyChainPreview');
 
@@ -444,20 +444,20 @@
         const isLast = idx === currentHistoryChain.length - 1;
         
         return `
-            <div class="relative flex gap-3 pb-4 ${isLast ? 'pb-0' : ''}">
+            <div class="relative flex gap-3 pb-5 ${isLast ? 'pb-0' : ''}">
                 <!-- Vertical line connecting dots -->
-                ${!isLast ? '<div class="absolute left- top- w-0.5 h-full bg-slate-700"></div>' : ''}
+                ${!isLast ? '<div class="absolute left-[5.5px] top- w-px h-full bg-slate-600"></div>' : ''}
                 
                 <!-- Dot indicator -->
-                <div class="relative z-10 mt-1">
-                    <div class="w- h- rounded-full ${isLatest ? 'bg-yellow-400 ring-4 ring-yellow-400/20 animate-pulse' : 'bg-blue-500'}"></div>
+                <div class="relative z-10 mt-1.5 shrink-0">
+                    <div class="w- h- rounded-full ${isLatest ? 'bg-yellow-400 ring-4 ring-yellow-400/20 animate-pulse' : 'bg-blue-500 ring-4 ring-blue-500/10'}"></div>
                 </div>
                 
                 <!-- Location + Time -->
-                <div class="flex-1">
-                    <div class="flex justify-between items-start">
-                        <span class="${isLatest ? 'text-yellow-400 font-bold' : 'text-slate-300'} text-xs">${item.location}</span>
-                        <span class="text-slate-500 text- ml-2 whitespace-nowrap">${item.time}</span>
+                <div class="flex-1 min-w-0">
+                    <div class="flex justify-between items-start gap-2">
+                        <span class="${isLatest ? 'text-yellow-400 font-bold' : 'text-slate-300'} text-xs break-words">${item.location}</span>
+                        <span class="text-slate-500 text- whitespace-nowrap shrink-0">${item.time}</span>
                     </div>
                 </div>
             </div>
