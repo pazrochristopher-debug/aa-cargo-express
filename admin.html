@@ -430,23 +430,40 @@
             updateHistoryPreview();
         }
 
-        function updateHistoryPreview() {
-            document.getElementById('chainCount').innerText = currentHistoryChain.length;
-            const preview = document.getElementById('historyChainPreview');
+       function updateHistoryPreview() {
+    document.getElementById('chainCount').innerText = currentHistoryChain.length;
+    const preview = document.getElementById('historyChainPreview');
 
-            if (currentHistoryChain.length === 0) {
-                preview.innerHTML = '<p class="text-slate-600">No checkpoints yet</p>';
-                return;
-            }
+    if (currentHistoryChain.length === 0) {
+        preview.innerHTML = '<p class="text-slate-600">No checkpoints yet</p>';
+        return;
+    }
 
-            preview.innerHTML = currentHistoryChain.map((item, idx) => `
-                <div class="flex justify-between items-center ${idx === 0? 'text-blue-400' : 'text-slate-400'}">
-                    <span>• ${item.location}</span>
-                    <span class="text-">${item.time}</span>
+    preview.innerHTML = currentHistoryChain.map((item, idx) => {
+        const isLatest = idx === 0; // Since you unshift, 0 is the latest
+        const isLast = idx === currentHistoryChain.length - 1;
+        
+        return `
+            <div class="relative flex gap-3 pb-4 ${isLast ? 'pb-0' : ''}">
+                <!-- Vertical line connecting dots -->
+                ${!isLast ? '<div class="absolute left- top- w-0.5 h-full bg-slate-700"></div>' : ''}
+                
+                <!-- Dot indicator -->
+                <div class="relative z-10 mt-1">
+                    <div class="w- h- rounded-full ${isLatest ? 'bg-yellow-400 ring-4 ring-yellow-400/20 animate-pulse' : 'bg-blue-500'}"></div>
                 </div>
-            `).join('');
-        }
-
+                
+                <!-- Location + Time -->
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <span class="${isLatest ? 'text-yellow-400 font-bold' : 'text-slate-300'} text-xs">${item.location}</span>
+                        <span class="text-slate-500 text- ml-2 whitespace-nowrap">${item.time}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
         document.getElementById('adminPass').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') checkPassword();
         });
