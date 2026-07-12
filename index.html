@@ -522,29 +522,48 @@
                 rPhone.innerText = match.recipientPhone || 'N/A';
                 rEmail.innerText = match.recipientEmail || 'N/A';
 
-                let chain = [];
-                try {
-                    chain = typeof match.historyChain === 'string'? JSON.parse(match.historyChain) : (match.historyChain || []);
-                } catch(e) { chain = []; }
+             let chain = [];
+try {
+    chain = typeof match.historyChain === 'string'? JSON.parse(match.historyChain) : (match.historyChain || []);
+} catch(e) { chain = []; }
 
-                if(chain.length === 0) {
-                    const fallbackLoc = match.currentLocation || 'In Transit to Destination Hub Module';
-                    timeline.innerHTML = `
-                        <div class="relative pl-0.5 text-left">
-                            <span class="absolute -left- top-1 bg-blue-500 w-1.5 h-1.5 rounded-full ring-4 ring-slate-950"></span>
-                            <p class="text-slate-300 font-extrabold text-xs tracking-wide">${fallbackLoc}</p>
-                            <p class="text-slate-500 text- font-mono mt-0.5">Automated Checkpoint Link</p>
-                        </div>
-                    `;
-                } else {
-                    timeline.innerHTML = chain.map((step, idx) => `
-                        <div class="relative pl-0.5 text-left">
-                            <span class="absolute -left- top-1 ${idx === 0? 'bg-blue-400 animate-pulse' : 'bg-slate-700'} w-1.5 h-1.5 rounded-full ring-4 ring-slate-950"></span>
-                            <p class="${idx === 0? 'text-blue-400 font-black' : 'text-slate-300 font-bold'} text-xs tracking-wide">${step.location}</p>
-                            <p class="text-slate-500 text- mt-0.5 font-mono"><i class="far fa-clock mr-1 text-"></i> ${step.time}</p>
-                        </div>
-                    `).join('');
-                }
+console.log('INDEX.HTML VERSION 3 - INLINE STYLES LOADED');
+
+if(chain.length === 0) {
+    const fallbackLoc = match.currentLocation || 'In Transit to Destination Hub Module';
+    timeline.innerHTML = `
+        <div style="position: relative; display: flex; align-items: flex-start;">
+            <div style="width: 12px; height: 12px; border-radius: 50%; background: #3b82f6; margin-top: 2px; flex-shrink: 0;"></div>
+            <div style="margin-left: 16px; flex: 1; min-width: 0;">
+                <p style="color: #cbd5e1; font-size: 12px; font-weight: 700; word-break: break-word;">${fallbackLoc}</p>
+                <p style="color: #64748b; font-size: 10px; margin-top: 2px;">Automated Checkpoint Link</p>
+            </div>
+        </div>
+    `;
+} else {
+    let html = '';
+    for (let i = 0; i < chain.length; i++) {
+        const item = chain[i];
+        const isLatest = i === 0;
+        const isLast = i === chain.length - 1;
+
+        html += `
+            <div style="position: relative; display: flex; align-items: flex-start; padding-bottom: ${isLast? '0px' : '24px'};">
+                ${!isLast? '<div style="position: absolute; left: 5px; top: 18px; bottom: -6px; width: 2px; background: #334155;"></div>' : ''}
+
+                <div style="width: 12px; height: 12px; border-radius: 50%; background: ${isLatest? '#fbbf24' : '#3b82f6'}; margin-top: 2px; flex-shrink: 0; position: relative; z-index: 1; ${isLatest? 'box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2);' : ''}"></div>
+
+                <div style="margin-left: 16px; flex: 1; min-width: 0;">
+                    <div style="display: flex; justify-content: space-between; gap: 12px; align-items: flex-start;">
+                        <span style="color: ${isLatest? '#fbbf24' : '#cbd5e1'}; font-size: 12px; font-weight: ${isLatest? '700' : '400'}; word-break: break-word;">${item.location}</span>
+                        <span style="color: #64748b; font-size: 10px; white-space: nowrap; flex-shrink: 0;">${item.time}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    timeline.innerHTML = html;
+}
 
                 desc.innerText = match.description || 'General Merchandise Packaging Content';
 
